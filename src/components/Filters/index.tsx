@@ -6,10 +6,36 @@ import {
   Radio,
   Select,
   Tag,
-  type SelectProps
+  type SelectProps,
+  type RadioChangeEvent
 } from 'antd'
+import React, { useState } from 'react'
+import type { priorityType } from '../Todo'
+import { useAppDispatch } from '../../redux/hook'
+import { filterSlice } from './filterSlice'
 
 function Filters() {
+  const [search, setSearch] = useState<string>('')
+  const [status, setStatus] = useState<string>('All')
+  const [priority, setPriority] = useState<priorityType[]>([])
+
+  const dispatch = useAppDispatch()
+
+  const handleRadioChange = (e: RadioChangeEvent) => {
+    setStatus(e.target.value)
+    dispatch(filterSlice.actions.statusFilterChange(e.target.value))
+  }
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value)
+    dispatch(filterSlice.actions.searchFilterChange(e.target.value))
+  }
+
+  const handlePriorityChange = (value: priorityType[]) => {
+    setPriority(value)
+    dispatch(filterSlice.actions.priorityFilterChange(value))
+  }
+
   type TagRender = SelectProps['tagRender']
 
   const options: SelectProps['options'] = [
@@ -52,7 +78,12 @@ function Filters() {
         <Typography.Paragraph className="font-bold my-3">
           Search
         </Typography.Paragraph>
-        <Input size="large" placeholder="Tìm kiếm..." />
+        <Input
+          size="large"
+          placeholder="Tìm kiếm..."
+          value={search}
+          onChange={handleSearchChange}
+        />
       </Col>
       <Col span={24}>
         <Typography.Paragraph className="font-bold my-3">
@@ -60,7 +91,8 @@ function Filters() {
         </Typography.Paragraph>
         <Radio.Group
           name="radioGroup"
-          defaultValue={1}
+          value={status}
+          onChange={handleRadioChange}
           options={[
             { label: 'All', value: 'All' },
             { label: 'Completed', value: 'Completed' },
@@ -73,8 +105,12 @@ function Filters() {
           Filter By Priority
         </Typography.Paragraph>
         <Select
+          defaultValue={priority}
+          onChange={handlePriorityChange}
           size="large"
           mode="multiple"
+          allowClear
+          placeholder="Chọn độ ưu tiên"
           tagRender={tagRender}
           style={{ width: '100%' }}
           options={options}
