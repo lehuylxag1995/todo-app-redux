@@ -5,7 +5,7 @@ import type { priorityType } from '../components/Todo'
 const searchFilterSelector = (state: RootState) => state.filterList.search
 const statusFilterSelector = (state: RootState) => state.filterList.status
 const prioprityFilterSelector = (state: RootState) => state.filterList.priority
-const todoListSelector = (state: RootState) => state.todoList
+const todoListSelector = (state: RootState) => state.todoList.todos
 
 export const todoRemainingSelector = createSelector(
   [

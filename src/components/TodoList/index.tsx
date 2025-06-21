@@ -2,7 +2,7 @@ import { Button, Col, Input, Row, Select, Space, Tag } from 'antd'
 import Todo, { type priorityType } from '../Todo'
 
 import { v4 as uuidv4 } from 'uuid'
-import { todoListSlice } from './todoListSlice'
+import { addTodoThunk, fetchTodos, todoListSlice } from './todoListSlice'
 import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../redux/hook'
 import { todoRemainingSelector } from '../../redux/selector'
@@ -30,8 +30,18 @@ function TodoList() {
   //Xử lý nút thêm
   const handleAddButtonClick = () => {
     //Phát sự kiện thêm mới đến reducer
+    // dispatch(
+    //   todoListSlice.actions.addTodo({
+    //     id: uuidv4(),
+    //     name: name,
+    //     priority: priority,
+    //     completed: false
+    //   })
+    // )
+
+    //Sử dụng thunk làm middleware để thực hiện thêm mới
     dispatch(
-      todoListSlice.actions.addTodo({
+      addTodoThunk({
         id: uuidv4(),
         name: name,
         priority: priority,

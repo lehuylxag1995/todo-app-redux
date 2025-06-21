@@ -1,7 +1,7 @@
 import { Checkbox, Row, Tag } from 'antd'
 import { useState } from 'react'
 import { useAppDispatch } from '../../redux/hook'
-import { todoListSlice } from '../TodoList/todoListSlice'
+import { todoListSlice, toggleCompletedThunk } from '../TodoList/todoListSlice'
 
 export type priorityType = 'High' | 'Medium' | 'Low'
 
@@ -31,12 +31,13 @@ function Todo({
   }
 
   const handleCheckboxChange = () => {
-    dispatch(
-      todoListSlice.actions.toggleComplete({
-        id: id,
-        completed: checked
-      })
-    )
+    // dispatch(
+    //   todoListSlice.actions.toggleComplete({
+    //     id: id,
+    //     completed: checked
+    //   })
+    // )
+    dispatch(toggleCompletedThunk({ id: id }))
   }
 
   return (
